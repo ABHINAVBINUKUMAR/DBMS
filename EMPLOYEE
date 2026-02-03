@@ -1,0 +1,99 @@
+mysql> create table persons(person_id int primary key, name varchar(50) not null, adhar varchar(20) not null unique, age int check(age>18));
+ERROR 1046 (3D000): No database selected
+mysql> create database details;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> ^C
+mysql> create table persons(person_id int primary key, name varchar(50) not null, adhar varchar(20) not null unique, age int check(age>18));
+ERROR 1046 (3D000): No database selected
+mysql> use details;
+Database changed
+mysql> create table persons(person_id int primary key, name varchar(50) not null, adhar varchar(20) not null unique, age int check(age>18));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> create table orders(order_id int primary key, order int not null, person id int foriegn key(person_id) references person(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order int not null, person id int foriegn key(person_id) references person(perso' at line 1
+mysql> create table orders(order_id int primary key, order_no int(10) not null, person_id int,foriegn key(person_id) references persons(person_id));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(person_id) references persons(person_id))' at line 1
+mysql> create table orders(order_id int primary key, order_no int(10) not null, person_id int(10),foreign key(person_id) references persons(person_id));
+Query OK, 0 rows affected, 2 warnings (0.05 sec)
+
+mysql> desc persons;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| person_id | int         | NO   | PRI | NULL    |       |
+| name      | varchar(50) | NO   |     | NULL    |       |
+| adhar     | varchar(20) | NO   | UNI | NULL    |       |
+| age       | int         | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.02 sec)
+
+mysql> desc orders;
++-----------+------+------+-----+---------+-------+
+| Field     | Type | Null | Key | Default | Extra |
++-----------+------+------+-----+---------+-------+
+| order_id  | int  | NO   | PRI | NULL    |       |
+| order_no  | int  | NO   |     | NULL    |       |
+| person_id | int  | YES  | MUL | NULL    |       |
++-----------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table employee add primary key (emp_no);
+ERROR 1146 (42S02): Table 'details.employee' doesn't exist
+mysql> create table employee(employee_no int(10),employee_name varchar(30),place varchar(10),phone_no int(10),department_name varchar(30),job_id int(10),salary int(30));
+Query OK, 0 rows affected, 4 warnings (0.04 sec)
+
+mysql> create table department(department_no int(10), employee_no int(10),employee_name varchar(30));
+Query OK, 0 rows affected, 2 warnings (0.05 sec)
+
+mysql> alter table employee add primary key(empp_no);
+ERROR 1072 (42000): Key column 'empp_no' doesn't exist in table
+mysql> alter table employee add primary key(emp_no);
+ERROR 1072 (42000): Key column 'emp_no' doesn't exist in table
+mysql> alter table employee add primary key(employee_no);
+Query OK, 0 rows affected (0.07 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table dept add primary key(department_name);
+ERROR 1146 (42S02): Table 'details.dept' doesn't exist
+mysql> alter table department add primary key(department_name);
+ERROR 1072 (42000): Key column 'department_name' doesn't exist in table
+mysql> alter table department add primary key(dept_name);
+ERROR 1072 (42000): Key column 'dept_name' doesn't exist in table
+mysql> alter table department add primary key(department_no);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE employee ADD dept_no INT, ADD CONSTRAINT fk_employee_department FOREIGN KEY (dept_no) REFERENCES department(dept_no) ON DELETE CASCADE;
+ERROR 3734 (HY000): Failed to add the foreign key constraint. Missing column 'dept_no' for constraint 'fk_employee_department' in the referenced table 'department'
+mysql> 
+mysql> ALTER TABLE employee
+    -> ADD department_no INT,
+    -> ADD CONSTRAINT fk_employee_department
+    -> FOREIGN KEY (department_no)
+    -> REFERENCES department(department_no)
+    -> ON DELETE CASCADE;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee;
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| employee_no     | int         | NO   | PRI | NULL    |       |
+| employee_name   | varchar(30) | YES  |     | NULL    |       |
+| place           | varchar(10) | YES  |     | NULL    |       |
+| phone_no        | int         | YES  |     | NULL    |       |
+| department_name | varchar(30) | YES  |     | NULL    |       |
+| job_id          | int         | YES  |     | NULL    |       |
+| salary          | int         | YES  |     | NULL    |       |
+| department_no   | int         | YES  | MUL | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)
+
+mysql> alter table orders drop primary key;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
