@@ -1,0 +1,282 @@
+mca@mca-HP-Pro-Tower-280-G9-E-PCI-Desktop-PC:~$ sudo mysql
+[sudo] password for mca: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.45-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| student            |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> create database sql;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sql' at line 1
+mysql> create database order;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order' at line 1
+mysql> create database order
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'order' at line 1
+mysql> create database  tcl;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> use tcl;
+Database changed
+mysql> create table order_details(oder_id int, product_name varchar(50), order)
+    -> ^C
+mysql> create table order_details(oder_id int, product_name varchar(50), order_no int, order_date DATE);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into order_detail values(1,'laptop',234,'2003-03-02');
+ERROR 1146 (42S02): Table 'tcl.order_detail' doesn't exist
+mysql> insert into oder_detail values(1,'laptop',234,'2003-03-02');
+ERROR 1146 (42S02): Table 'tcl.oder_detail' doesn't exist
+mysql> insert into order_details values(1,'laptop',234,'2003-03-02');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into order_details values(2,'keyboard',235,'2004-03-02');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into order_details values(3,'mouse',236,'2004-04-02');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into order_details values(4,'desktop',237,'2003-02-02');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into order_details values(6,'printer',600,'2003-02-03');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into order_details values(7,'scanner',601,'2004-02-03');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from order_details;
++---------+--------------+----------+------------+
+| oder_id | product_name | order_no | order_date |
++---------+--------------+----------+------------+
+|       1 | laptop       |      234 | 2003-03-02 |
+|       2 | keyboard     |      235 | 2004-03-02 |
+|       3 | mouse        |      236 | 2004-04-02 |
+|       4 | desktop      |      237 | 2003-02-02 |
+|       6 | printer      |      600 | 2003-02-03 |
+|       7 | scanner      |      601 | 2004-02-03 |
++---------+--------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delete from order_details where order_id in(4,5);
+ERROR 1054 (42S22): Unknown column 'order_id' in 'where clause'
+mysql> delete from order_details where oder_id in(4,5);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from order_details;
++---------+--------------+----------+------------+
+| oder_id | product_name | order_no | order_date |
++---------+--------------+----------+------------+
+|       1 | laptop       |      234 | 2003-03-02 |
+|       2 | keyboard     |      235 | 2004-03-02 |
+|       3 | mouse        |      236 | 2004-04-02 |
+|       6 | printer      |      600 | 2003-02-03 |
+|       7 | scanner      |      601 | 2004-02-03 |
++---------+--------------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from order_details;
++---------+--------------+----------+------------+
+| oder_id | product_name | order_no | order_date |
++---------+--------------+----------+------------+
+|       1 | laptop       |      234 | 2003-03-02 |
+|       2 | keyboard     |      235 | 2004-03-02 |
+|       3 | mouse        |      236 | 2004-04-02 |
+|       6 | printer      |      600 | 2003-02-03 |
+|       7 | scanner      |      601 | 2004-02-03 |
++---------+--------------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SAVEPOINT update;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'update' at line 1
+mysql> SAVEPOINT p-update;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-update' at line 1
+mysql> SAVEPOINT p_update;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update order_details;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> update order_details set product_name = 'gaming keyboard' where order_no = 457;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> select * from order_details;
++---------+--------------+----------+------------+
+| oder_id | product_name | order_no | order_date |
++---------+--------------+----------+------------+
+|       1 | laptop       |      234 | 2003-03-02 |
+|       2 | keyboard     |      235 | 2004-03-02 |
+|       3 | mouse        |      236 | 2004-04-02 |
+|       6 | printer      |      600 | 2003-02-03 |
+|       7 | scanner      |      601 | 2004-02-03 |
++---------+--------------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> update order_details set product_name = 'gaming keyboard' where order_no = 235;
+Query OK, 1 row affected (0.02 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from order_details;
++---------+-----------------+----------+------------+
+| oder_id | product_name    | order_no | order_date |
++---------+-----------------+----------+------------+
+|       1 | laptop          |      234 | 2003-03-02 |
+|       2 | gaming keyboard |      235 | 2004-03-02 |
+|       3 | mouse           |      236 | 2004-04-02 |
+|       6 | printer         |      600 | 2003-02-03 |
+|       7 | scanner         |      601 | 2004-02-03 |
++---------+-----------------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into order_details values(a,'phone',603,'2005-02-03');
+ERROR 1054 (42S22): Unknown column 'a' in 'field list'
+mysql> insert into order_details values(8,'phone',603,'2005-02-03');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into order_details values(9,'tablet',604,'2006-02-03');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SAVEPOINT delt;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from order_details where product name='desktop';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name='desktop'' at line 1
+mysql> delete from order_details where product name='scanner';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name='scanner'' at line 1
+mysql> delete from order_details where product name = 'scanner';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name = 'scanner'' at line 1
+mysql> delete from order_details where product_name = 'scanner';
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from order_details;
++---------+-----------------+----------+------------+
+| oder_id | product_name    | order_no | order_date |
++---------+-----------------+----------+------------+
+|       1 | laptop          |      234 | 2003-03-02 |
+|       2 | gaming keyboard |      235 | 2004-03-02 |
+|       3 | mouse           |      236 | 2004-04-02 |
+|       6 | printer         |      600 | 2003-02-03 |
+|       8 | phone           |      603 | 2005-02-03 |
+|       9 | tablet          |      604 | 2006-02-03 |
++---------+-----------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> rollback to delt;
+ERROR 1305 (42000): SAVEPOINT delt does not exist
+mysql> rollback to delt;
+ERROR 1305 (42000): SAVEPOINT delt does not exist
+mysql> ROLLBACK to delt;
+ERROR 1305 (42000): SAVEPOINT delt does not exist
+mysql> ROLLBACK  TO  delt;
+ERROR 1305 (42000): SAVEPOINT delt does not exist
+mysql> ROLLBACK TO delt;
+ERROR 1305 (42000): SAVEPOINT delt does not exist
+mysql> ROLLBACK  delt;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delt' at line 1
+mysql> SAVEPOINT abc;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update update order_details set product_name = 'gaming keyboard' where order_no = 235;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'update order_details set product_name = 'gaming keyboard' where order_no = 235' at line 1
+mysql> update update order_details set product_name = 'ipad' where order_no = 604;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'update order_details set product_name = 'ipad' where order_no = 604' at line 1
+mysql> update order_details set product_name = 'ipad' where order_no = 604;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from order_details;
++---------+-----------------+----------+------------+
+| oder_id | product_name    | order_no | order_date |
++---------+-----------------+----------+------------+
+|       1 | laptop          |      234 | 2003-03-02 |
+|       2 | gaming keyboard |      235 | 2004-03-02 |
+|       3 | mouse           |      236 | 2004-04-02 |
+|       6 | printer         |      600 | 2003-02-03 |
+|       8 | phone           |      603 | 2005-02-03 |
+|       9 | ipad            |      604 | 2006-02-03 |
++---------+-----------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> ROLLBACK to abc;
+ERROR 1305 (42000): SAVEPOINT abc does not exist
+mysql> rollback to abc;
+ERROR 1305 (42000): SAVEPOINT abc does not exist
+mysql> set autocommit=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SAVEPOINT delt;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update order_details set product_name = 'speaker' where order_no = 604;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> ROLLBACK to delt;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from order_details;
++---------+-----------------+----------+------------+
+| oder_id | product_name    | order_no | order_date |
++---------+-----------------+----------+------------+
+|       1 | laptop          |      234 | 2003-03-02 |
+|       2 | gaming keyboard |      235 | 2004-03-02 |
+|       3 | mouse           |      236 | 2004-04-02 |
+|       6 | printer         |      600 | 2003-02-03 |
+|       8 | phone           |      603 | 2005-02-03 |
+|       9 | ipad            |      604 | 2006-02-03 |
++---------+-----------------+----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set autocommi=1;
+ERROR 1193 (HY000): Unknown system variable 'autocommi'
+mysql> set autocommit=1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update order_details set product_name = 'gaming keyboard' where order_no = 235;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> update order_details set product_name = 'gaming keyboard' where order_no = 235;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> update order_details set product_name = 'gaming keyboard' where order_no = 235;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> update order_details set product_name = 'gaming keyboard' where order_no = 235;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> 
+
